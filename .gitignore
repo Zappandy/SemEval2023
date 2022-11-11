@@ -1,0 +1,10 @@
+.ipynb_checkpoints
+__pycache__
+lstm-baseline/*.pt
+lstm-baseline/vectors
+multiconer-baseline/__pycache__
+multiconer-baseline/env
+multiconer-baseline/.idea
+multiconer-baseline/xlmr_ner
+multiconer-baseline/utils/__pycache__
+multiconer-baseline/model/__pycache__
