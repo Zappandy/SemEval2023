@@ -58,12 +58,12 @@ class PreDataCollator:
         
         i = 0
         for idx, mapping in enumerate(encoding["offset_mapping"]):
-            if mapping[0] == 0 and mapping[1] != 0:
+            if mapping[0] == 0 and mapping[1] != 0 and encoding['input_ids'][idx]!=6:
                 # overwrite the tag
                 try:
                     encoded_tags[idx] = tags[i]
                     i += 1
-                except:
+                except Exception as err:
 #                     print(encoding["offset_mapping"])
 #                     print(i)
                     print(sentence)

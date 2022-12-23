@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 class InformationExtractionPipeline:
     
-    def __init__(self, extractor, max_sen = 2, lang = 'en', loadJson = False, jsonPath=None ,saveJson=False):
+    def __init__(self, extractor, max_sen = 2, lang = 'en', loadJson = False, jsonPath=None ,saveJson=False, saveJsonpath=None):
         """
         It takes in a wikipedia extractor object, a maximum number of sentences to extract, a language, a
         boolean to load a json file, a path to the json file, and a boolean to save the json file
@@ -36,7 +36,7 @@ class InformationExtractionPipeline:
                 with open(jsonPath,'r') as f:
                         self.wiki_dict = json.load(f)
             except:
-                print('JSON NOT FOUND: pass saved json file directory')
+                print('JSON NOT FOUND: pass saved json file path')
                 raise SystemExit
 
 
@@ -44,6 +44,8 @@ class InformationExtractionPipeline:
             self.wiki_dict = {}
 
         self.saveJson = saveJson
+
+        self.saveJsonpath = saveJsonpath
 
 
 
@@ -68,8 +70,12 @@ class InformationExtractionPipeline:
             
         try:
             if self.saveJson:
-                with open(f'wiki-info-{self.lang}.json', 'w') as f:
-                    json.dump(self.wiki_dict, f)
+                if self.saveJsonpath !=None:
+                    with open(self.saveJsonpath, 'w') as f:
+                        json.dump(self.wiki_dict, f)
+                else:
+                    with open(f'wiki-info-{self.lang}.json', 'w') as f:
+                        json.dump(self.wiki_dict, f)
         except:
             print("JSON save failed")
 
@@ -150,7 +156,8 @@ class InformationExtractionPipeline:
         information = []
         try: 
             for link in wiki_links:
-
+                if link=='':
+                    continue
                 
                 if link in self.wiki_dict:
                     summary = self.wiki_dict[link]
