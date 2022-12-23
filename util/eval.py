@@ -12,7 +12,7 @@ metric_acc = evaluate.load("accuracy")
 metric_f1 = evaluate.load("f1")
 
 def get_tag_mappings():
-    with open('tags.txt','r') as file:
+    with open('../util/tags.txt','r') as file:
         unique_tags = [line.strip() for line in file]
 
 
