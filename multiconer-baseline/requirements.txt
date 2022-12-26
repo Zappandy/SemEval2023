@@ -1,9 +1,0 @@
-allennlp
-pandas
-pytorch-lightning
-torch
-tqdm
-transformers
-overrides
-
-#python -m train_model --train bn-train.conll --dev bn-dev.conll --out_dir . --model_name xlmr_ner --gpus 1 --epochs 2 --encoder_model xlm-roberta-base --batch_size 4 --lr 0.0001

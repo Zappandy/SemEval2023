@@ -36,7 +36,7 @@ class PreDataCollator:
         
         # getting the sentences and word tags
         
-        sentence = sentence.strip().split()  
+        sentence = sentence.replace('.',' . ').strip().split() 
         word_tags = tags.split() 
 
         # using tokenizer to encode sentence (includes padding/truncation up to max length)
@@ -61,6 +61,8 @@ class PreDataCollator:
             if mapping[0] == 0 and mapping[1] != 0 and encoding['input_ids'][idx]!=6:
                 # overwrite the tag
                 try:
+                    if i>= len(word_tags):
+                        continue
                     encoded_tags[idx] = tags[i]
                     i += 1
                 except:
