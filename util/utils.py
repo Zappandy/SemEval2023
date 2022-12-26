@@ -41,7 +41,7 @@ def get_data(LANG, SET, train=True):
         df = df.drop(columns=['sent'])
         df = df.rename(columns={'augmented_sen':'sent'})
     else:
-        df = pd.read_csv(f'./Dataset/train.csv')
+        df = pd.read_csv(f'./Dataset/{exp}.csv')
 
     return df
 
