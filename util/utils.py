@@ -45,7 +45,7 @@ def get_data(LANG, SET, train=True):
 
     return df
 
-def compute_metrics_test(preds,labels, is_crf= False):
+def compute_metrics_test(preds, labels, is_crf= False):
     
 
     tr_active_acc = labels != -100
@@ -61,6 +61,50 @@ def compute_metrics_test(preds,labels, is_crf= False):
     # f1 = metric_f1.compute(predictions=predicts, references=tags, average='macro')
     
     return tags.tolist(), predicts.tolist()
+
+
+def compute_metrics_crf(pred):
+    """
+    We're going to compute the accuracy and f1 score of the predictions made by the model
+    
+    :param pred: the output of the model
+    """
+    
+
+    pred_logits = pred.predictions
+    pred_ids = torch.tensor(pred_logits)
+
+    tr_active_acc = torch.from_numpy(pred.label_ids != -100)
+    pr_active_acc = torch.from_numpy(pred_logits != -100)
+
+    train_tags = torch.masked_select(torch.from_numpy(pred.label_ids), tr_active_acc)
+    train_predicts = torch.masked_select(pred_ids, pr_active_acc)
+
+    acc = metric_acc.compute(predictions=train_predicts, references=train_tags)
+    f1 = metric_f1.compute(predictions=train_predicts, references=train_tags, average='macro')
+    
+    return {'accuracy': acc['accuracy'], 'f1':f1['f1']}
+
+def compute_metrics(pred):
+    """
+    It takes the predictions from the model and computes the accuracy and f1 score
+    
+    :param pred: the prediction object returned by the model
+    """
+    
+    
+    pred_logits = pred.predictions
+    pred_ids = torch.from_numpy(np.argmax(pred_logits, axis=-1))
+
+    tr_active_acc = torch.from_numpy(pred.label_ids != -100)
+
+    train_tags = torch.masked_select(torch.from_numpy(pred.label_ids), tr_active_acc)
+    train_predicts = torch.masked_select(pred_ids, tr_active_acc)
+
+    acc = metric_acc.compute(predictions=train_predicts, references=train_tags)
+    f1 = metric_f1.compute(predictions=train_predicts, references=train_tags, average='macro')
+    
+    return {'accuracy': acc['accuracy'], 'f1':f1['f1']}
 
 
 def print_predictions(tokens, pred_tags, true_tags):
