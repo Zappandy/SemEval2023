@@ -71,14 +71,14 @@ def print_predictions(tokens, pred_tags, true_tags):
     true_tags = [ids_to_tags[idx] for idx in true_tags if idx!=-100]
     
     
-    if len(tokens) != len(pred_tags):
-        print(tokens)
-        return " "
+    # if len(tokens) != len(pred_tags):
+    #     print(tokens)
+    #     return " "
     
     output = []
     
     
-    for t,tl,pl in zip(tokens,true_tags,pred_tags):
+    for t,tl,pl in zip(tokens[:len(true_tags)],true_tags,pred_tags):
 
         if tl == pl:
             o = f"{t} {Back.GREEN}[{tl}][{pl}]{Style.RESET_ALL}"
