@@ -129,16 +129,9 @@ def main():
     # In[ ]:
     
     
-    if IS_CRF:
-        model = CRF(MODEL_NAME,ids_to_tags,number_of_labels,device=device)
-    else:
-        model = AutoModelForTokenClassification.from_pretrained(MODEL_NAME, num_labels=number_of_labels)
+    model = AutoModelForTokenClassification.from_pretrained(MODEL_NAME, num_labels=number_of_labels)
         
     model = model.to(device)
-    
-    
-    # In[ ]:
-    
     
     EPOCHS = 7
     LEARNING_RATE = 1e-04
@@ -149,15 +142,7 @@ def main():
     SAVE_LIMIT = 2
     WARMUP_STEPS = 100
     
-    
-    # In[ ]:
-    
-    
     data_collator = DataCollatorForTokenClassification(tokenizer, return_tensors='pt')
-    
-    
-    # In[ ]:
-    
     
     
     training_args = TrainingArguments(

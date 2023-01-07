@@ -77,11 +77,7 @@ def main():
     
     IS_CRF = args.crf
     
-    if IS_CRF:
-        from model import CRF
-        output_dir = f"./output/{MODEL_NAME}-{LANG}-{SET}-CRF" if SET!=None else f"./output/{MODEL_NAME}-{LANG}-CRF"
-    else:
-        output_dir = f"./output/{MODEL_NAME}-{LANG}-{SET}" if SET!=None else f"./output/{MODEL_NAME}-{LANG}"
+    output_dir = f"./output/{MODEL_NAME}-{LANG}-{SET}" if SET!=None else f"./output/{MODEL_NAME}-{LANG}"
     
     
     # ### Preparing data
