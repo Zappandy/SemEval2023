@@ -178,5 +178,5 @@ def main():
     df.to_csv(f'{output_dir}/outputs.csv',index=False)
 
 
-if __name__ == "main":
+if __name__ == '__main__':
     main()

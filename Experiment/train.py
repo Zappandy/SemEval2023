@@ -21,7 +21,6 @@ from util.dataloader import PreDataCollator
 
 os.environ["WANDB_DISABLED"] = "true"
 
-
 device = 'cuda' if cuda.is_available() else 'cpu'
 
 ### Seed all
@@ -61,7 +60,7 @@ torch.cuda.manual_seed_all(SEED)
 
 def main():
     
-    args = create_arg_parser
+    args = create_arg_parser()
 
     LANG = args.language# use None for all lang
     MAX_LEN = 256
@@ -196,5 +195,6 @@ def main():
     
     trainer.save_model(f"{output_dir}/Final")
 
-if __name__ == "main":
+if __name__ == '__main__':
     main()
+# %%
