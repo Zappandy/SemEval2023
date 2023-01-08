@@ -45,6 +45,27 @@ def get_data(LANG, SET, train=True):
 
     return df
 
+def get_data_from_hub(LANG, SET, split='validation'):
+
+    from datasets import load_dataset
+    dataset = load_dataset('garNER/custom-MultiCoNER-II', split=split)
+    if LANG!=None:
+        dataset = dataset.filter(lambda example: example['lang']==LANG)
+    
+    removed = ['ID', 'lang', 'None', 'tags', 'LM']
+    if SET==None:
+        SET='None'
+    removed.remove(SET)
+    dataset = dataset.remove_columns(removed)
+    dataset = dataset.rename_columns({SET:'sent'})
+
+
+    return dataset
+
+
+
+
+
 def compute_metrics_test(preds, labels, is_crf= False):
     
 
