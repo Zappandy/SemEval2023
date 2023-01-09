@@ -52,7 +52,7 @@ def get_data_from_hub(LANG, SET, split='validation'):
     if LANG!=None:
         dataset = dataset.filter(lambda example: example['lang']==LANG)
     
-    removed = ['ID', 'lang', 'None', 'tags', 'LM']
+    removed = ['None', 'tags', 'LM']
     if SET==None:
         SET='None'
     removed.remove(SET)
@@ -61,6 +61,30 @@ def get_data_from_hub(LANG, SET, split='validation'):
 
 
     return dataset
+
+
+def recreate_conll_format(data, col='labels'):
+
+    id = data['ID']
+    lang = data['lang']
+    lines = [f'# id {id} \t domain={lang}']
+    sents = data['sent'].split()
+    labels = data[col].split()
+    for token,label in zip(sents,labels):
+        line = f'{token} _ _ {label}'
+        lines.append(line)
+    
+    return "\n".join(lines)
+
+def write_conll_format(fileName, dataframe, col='labels'):
+
+    
+    with open(fileName,'w') as file:
+        for ind in range(dataframe.shape[0]):
+            data = dataframe.iloc[ind]
+            lines = recreate_conll_format(data, col)
+            file.write("\n"+lines+"\n\n")
+
 
 
 
@@ -189,7 +213,7 @@ def feval(test_data, test_tokenized, model, device, IS_CRF=False):
         
         vis, pred_tags, true_tags = print_predictions(test_data[i]['sent'],predicts,tags)
         
-        outputs.append((test_data[i]['sent'], pred_tags, true_tags))
+        outputs.append((test_data[i]['ID'],test_data[i]['lang'], test_data[i]['sent'], pred_tags, true_tags))
         
         # acc += result['accuracy']
         # f1 += result['f1']
