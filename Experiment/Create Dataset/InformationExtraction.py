@@ -149,8 +149,11 @@ class InformationExtractionPipeline:
         """
 
         
-        wiki_entities = self.extractor(sen)
-        wiki_links = ["_".join([token.capitalize() for token in names.strip().split()]) for names in set(wiki_entities)]
+        wiki_entities = self.extractor(sen,lang=self.lang)
+        if self.lang!='zh':
+            wiki_links = ["_".join([token.capitalize() for token in names.strip().split()]) for names in set(wiki_entities)]
+        else:
+            wiki_links = list(set(wiki_entities))
 
         wiki_wiki = wikipediaapi.Wikipedia(self.lang)
         information = []
