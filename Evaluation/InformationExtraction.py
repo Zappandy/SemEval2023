@@ -63,7 +63,7 @@ class InformationExtractionPipeline:
 
             return nlp
 
-        elif method=='LM' and lang!='en':
+        elif method=='LM' and lang=='en':
             
             self.extractor = self.tag_extraction_from_spacy
             return spacy.load("en_core_web_lg")
