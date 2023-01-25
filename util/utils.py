@@ -45,6 +45,8 @@ def get_data(LANG, SET, train=True):
 
     return df
 
+
+
 def get_data_from_hub(LANG, SET, split='validation'):
 
     from datasets import load_dataset
@@ -76,6 +78,13 @@ def recreate_conll_format(data, col='labels'):
     
     return "\n".join(lines)
 
+def recreate_conll_format_preds(data, col='labels'):
+
+
+    lines = data[col].split()
+    
+    return "\n".join(lines)
+
 def write_conll_format(fileName, dataframe, col='labels'):
 
     
@@ -85,7 +94,14 @@ def write_conll_format(fileName, dataframe, col='labels'):
             lines = recreate_conll_format(data, col)
             file.write("\n"+lines+"\n\n")
 
+def write_conll_format_preds(fileName, dataframe, col='labels'):
 
+    
+    with open(fileName,'w') as file:
+        for ind in range(dataframe.shape[0]):
+            data = dataframe.iloc[ind]
+            lines = recreate_conll_format_preds(data, col)
+            file.write("\n"+lines+"\n\n")
 
 
 
