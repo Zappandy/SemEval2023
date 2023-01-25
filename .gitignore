@@ -10,6 +10,6 @@ multiconer-baseline/utils/__pycache__
 multiconer-baseline/model/__pycache__
 PLM-baseline/output
 output
-*.json
+# .json
 backup
 *.tsv
