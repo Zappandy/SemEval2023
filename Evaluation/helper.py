@@ -34,9 +34,13 @@ def get_id_domain(line):
     
     line = line.replace("# id",'')
     ID = line.split('\t')[0].strip()
-    domain = line.split('\t')[1].replace('domain=','')
+    try:
+        domain = line.split('\t')[1].replace('domain=','')
+    except:
+        domain = None
 
     return ID, domain
+
 
 
 def prepare_data(file):
@@ -54,7 +58,10 @@ def prepare_data(file):
             
             entry = entry.split('_ _')
             tokens.append(entry[0])
-            label.append(entry[1])
+            try: 
+                label.append(entry[1])
+            except:
+                label.append(None)
         
         assert len(label)==len(tokens) 
         

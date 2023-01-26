@@ -72,7 +72,7 @@ class InformationExtractionPipeline:
 
 
 
-    def tag_extraction_from_spacy(self, sen):
+    def tag_extraction_from_spacy(self, sen, lang=None):
         
         annotated = self.model(sen)
         extracted_names = [word.text for word in annotated.ents 
