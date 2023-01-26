@@ -25,7 +25,10 @@ def create_arg_parser():
     parser.add_argument(
         "-ss", "--save_steps", default=1000, type=int, help="Provide number of save steps"
     )
-
+    
+    parser.add_argument(
+        "-b", "--batch_size", default=12, type=int, help="Change batch size"
+    )
 
     args = parser.parse_args()
     return args
