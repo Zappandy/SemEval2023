@@ -20,33 +20,35 @@ class PreDataCollator:
         labels = []
         sents = []
         ids = []
+        lengths = []
         
-        for sent,tag,id in zip(batch['sent'], batch['labels'], batch['ID']):
+        for sent, tag, id, length in zip(batch['sent'], batch['labels'], batch['ID'], batch['length']):
 
             
-            tokenized = self.tokenize(sent,tag)
+            tokenized = self.tokenize(sent, tag, length)
             input_ids.append(tokenized['input_ids'])
             attention_mask.append(tokenized['attention_mask'])
             labels.append(tokenized['labels'])
 
             sents.append(sent)
             ids.append(id)
+            lengths.append(length)
 
 
 
             
         
         
-        batch = {'input_ids':input_ids,'attention_mask':attention_mask, 'labels': labels, 'sents': sents, 'ID': ids}
+        batch = {'input_ids':input_ids,'attention_mask':attention_mask, 'labels': labels, 'sents': sents, 'ID': ids, 'length': lengths}
         
 
         return batch
 
-    def tokenize(self, sentence, tags):
+    def tokenize(self, sentence, tags, label_count):
         
         # getting the sentences and word tags
         
-        sentence = sentence.replace('.',' . ').strip().split() 
+        sentence = sentence.strip().split() 
          
 
         # using tokenizer to encode sentence (includes padding/truncation up to max length)
@@ -94,7 +96,7 @@ class PreDataCollator:
                 if mapping[0] == 0 and mapping[1] != 0 and encoding['input_ids'][idx]!=6:
                     # overwrite the tag
                     try:
-                        if i>= len(sentence):
+                        if i>= label_count:
                             continue
                         encoded_tags[idx] = 3
                         i += 1

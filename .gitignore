@@ -13,3 +13,5 @@ output
 # .json
 backup
 *.tsv
+test.ipynb
+.zip
