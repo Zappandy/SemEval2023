@@ -12,12 +12,12 @@
 # In[ ]:
 
 
-get_ipython().system('pip install transformers')
-get_ipython().system('pip install datasets')
-get_ipython().system('pip install evaluate')
-get_ipython().system('pip install colorama')
-get_ipython().system('pip install wikipedia-api')
-get_ipython().system('pip install sentencepiece')
+#get_ipython().system('pip install transformers')
+#get_ipython().system('pip install datasets')
+#get_ipython().system('pip install evaluate')
+#get_ipython().system('pip install colorama')
+#get_ipython().system('pip install wikipedia-api')
+#get_ipython().system('pip install sentencepiece')
 
 
 # In[ ]:
@@ -35,6 +35,7 @@ import random
 from datasets import Dataset
 from util.utils import feval, get_tag_mappings, get_data_from_hub, write_conll_format_preds
 from util.dataloader import PreDataCollator
+from util.args import create_arg_parser
 import nltk
 nltk.download('punkt')
 os.environ["WANDB_DISABLED"] = "true"
@@ -60,12 +61,17 @@ torch.cuda.manual_seed_all(SEED)
 
 # In[ ]:
 
+args = create_arg_parser()
 
-LANG = 'en' # use None for all lang
+LANG = args.language # use None for all lang
 MAX_LEN = 256
-TOKENIZER_NAME = 'garNER/roberta-large-en'
-MODEL_NAME = 'garNER/roberta-large-en'
-SET = None # 'LM' or None
+TOKENIZER_NAME = 'garNER/%s' %args.model
+MODEL_NAME = 'garNER/%s'%args.model
+if args.set == "None":
+    set = None
+else:
+    set = args.set
+SET = set # 'LM' or None
 EVAL_SET = 'test'
 
 
@@ -83,7 +89,7 @@ if LANG=='en' and SET=='LM':
 
 filename = f'../Dataset/{LANG}-{EVAL_SET}.conll'
 data = prepare_data(filename)
-
+data['length'] = data.sent.apply(lambda x:len(x.split()))
 
 # ## Augment Info
 
