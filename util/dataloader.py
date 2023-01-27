@@ -33,11 +33,7 @@ class PreDataCollator:
             sents.append(sent)
             ids.append(id)
             lengths.append(length)
-
-
-
-            
-        
+     
         
         batch = {'input_ids':input_ids,'attention_mask':attention_mask, 'labels': labels, 'sents': sents, 'ID': ids, 'length': lengths}
         
