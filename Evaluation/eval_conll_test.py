@@ -33,14 +33,13 @@ from transformers import AutoModelForTokenClassification, AutoTokenizer
 from tqdm import tqdm
 import random
 from datasets import Dataset
-from util.utils import feval, get_tag_mappings, get_data_from_hub, write_conll_format_preds
+from util.utils import get_tag_mappings, write_conll_format_preds
 from util.dataloader import PreDataCollator
 from util.args import create_arg_parser
 import nltk
 nltk.download('punkt')
 os.environ["WANDB_DISABLED"] = "true"
 from helper import prepare_data
-# !python -m spacy download en_core_web_lg
 
 
 # In[ ]:
@@ -59,15 +58,14 @@ torch.manual_seed(SEED)
 torch.cuda.manual_seed_all(SEED)
 
 
-# In[ ]:
-
+# In[3]:
 args = create_arg_parser()
 
 LANG = args.language # use None for all lang
 MAX_LEN = 256
-TOKENIZER_NAME = 'garNER/%s' %args.model
+TOKENIZER_NAME = 'garNER/%s'%args.model
 MODEL_NAME = 'garNER/%s'%args.model
-if args.set == "None":
+if args.set == 'None':
     set = None
 else:
     set = args.set
@@ -75,56 +73,35 @@ SET = set # 'LM' or None
 EVAL_SET = 'test'
 
 
-# In[ ]:
-
-
-if LANG=='en' and SET=='LM':
-    get_ipython().system('python -m spacy download en_core_web_lg')
-
-
 # ## Read Data
 
-# In[ ]:
+# In[9]:
 
 
-filename = f'../Dataset/{LANG}-{EVAL_SET}.conll'
-data = prepare_data(filename)
-data['length'] = data.sent.apply(lambda x:len(x.split()))
-
-# ## Augment Info
-
-# In[ ]:
-
-
-from InformationExtraction import InformationExtractionPipeline
-infoPipeline = InformationExtractionPipeline(SET, 
-                                        max_sen = 2, lang = LANG, 
-                                        loadJson = True, jsonPath=f'./Wiki/{LANG}-wiki.json')
-
-
-# In[ ]:
-
-
-if SET!=None :
-    augmented = infoPipeline(data[['sent','labels']].values.tolist())
-    data['augmented_sen'] = augmented
+if SET=='LM' :
+    filename = f'./Augmented-Dataset/{LANG}-{EVAL_SET}.csv'
+    data = pd.read_csv(filename)
+    data['length'] = data.sent.apply(lambda x:len(x.split()))
     test_df = data.drop(columns=['sent'])
     test_df = test_df.rename(columns={'augmented_sen':'sent'})
     test_data = Dataset.from_pandas(test_df)
 else:
-  test_data = Dataset.from_pandas(data)
+    filename = f'../Dataset/{LANG}-{EVAL_SET}.conll'
+    data = prepare_data(filename)
+    data['length'] = data.sent.apply(lambda x:len(x.split()))
+    test_data = Dataset.from_pandas(data)
 
 
 # ### Tokenization
 
-# In[ ]:
+# In[10]:
 
 
 tags_to_ids, ids_to_tags = get_tag_mappings()
 number_of_labels = len(tags_to_ids)
 
 
-# In[ ]:
+# In[11]:
 
 
 ## load appropiate tokenizer for pre-trained models
@@ -132,7 +109,7 @@ tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME, use_fast=True)
 collator = PreDataCollator(tokenizer=tokenizer, max_len=MAX_LEN, tags_to_ids = tags_to_ids, Set= EVAL_SET)
 
 
-# In[ ]:
+# In[12]:
 
 
 test_tokenized = test_data.map(collator, remove_columns=test_data.column_names, batch_size=8, num_proc=8, batched=True)
@@ -152,7 +129,7 @@ model = model.to(device)
 
 from torch.utils.data import DataLoader
 from util.utils import compute_metrics_test
-dataloader = DataLoader(test_tokenized, batch_size=12)
+dataloader = DataLoader(test_tokenized, batch_size=args.batch_size)
 outputs = []
 for batch in tqdm(dataloader):
 

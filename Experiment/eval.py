@@ -66,17 +66,18 @@ torch.cuda.manual_seed_all(SEED)
 
 def main():
 
-    args = create_arg_parser
+    args = create_arg_parser()
 
-    LANG = args.language# use None for all lang
+    LANG = args.language # use None for all lang
     MAX_LEN = 256
     TOKENIZER_NAME = args.model
     MODEL_NAME = args.model
     SET = args.set# or 'tags' or 'LM' or None
-    CHECKPOINT = '5500' # or 'final'
+    CHECKPOINT = 'Final'
     
-    IS_CRF = args.crf
-    
+    #IS_CRF = args.crf
+    IS_CRF = False
+
     output_dir = f"./output/{MODEL_NAME}-{LANG}-{SET}" if SET!=None else f"./output/{MODEL_NAME}-{LANG}"
     
     
@@ -146,7 +147,7 @@ def main():
     
     saved_model_dir = f'{output_dir}/checkpoint-{CHECKPOINT}' if CHECKPOINT !='Final' else f'{output_dir}/Final'
     if IS_CRF:
-        model = CRF(MODEL_NAME,ids_to_tags,number_of_labels,device=device)
+       # model = CRF(MODEL_NAME,ids_to_tags,number_of_labels,device=device)
         checkpoint = torch.load(f"{saved_model_dir}/pytorch_model.bin")
         model.load_state_dict(checkpoint)
     else:

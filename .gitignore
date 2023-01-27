@@ -15,3 +15,9 @@ backup
 *.tsv
 test.ipynb
 .zip
+Experiment/.run.py.swp
+Experiment/train.py.save
+bert-base-chinese-zh-LM/
+nano.save
+xlm-roberta-large-zh-LM/
+xlm-roberta-large-zh-tags/

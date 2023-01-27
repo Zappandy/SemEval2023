@@ -164,7 +164,7 @@ def main():
         model=model,
         data_collator=data_collator,
         args=training_args,
-        compute_metrics=compute_metrics_crf if IS_CRF else compute_metrics,
+        compute_metrics=compute_metrics,
         train_dataset=train_tokenized,
         eval_dataset=dev_tokenized,
         tokenizer=tokenizer
