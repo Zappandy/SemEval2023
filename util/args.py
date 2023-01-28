@@ -30,5 +30,9 @@ def create_arg_parser():
         "-b", "--batch_size", default=12, type=int, help="Change batch size"
     )
 
+    parser.add_argument(
+        "-lr", "--learning_rate", default=1e-04, type=float, help="change lr for bigger models eg. xlm-roberta-large"
+    )
+
     args = parser.parse_args()
     return args
