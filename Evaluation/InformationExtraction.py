@@ -249,7 +249,8 @@ class InformationExtractionPipeline:
         else:
             wiki_links = list(set(wiki_entities))
 
-        wiki_wiki = wikipediaapi.Wikipedia(self.lang)
+        # wiki_wiki = wikipediaapi.Wikipedia(self.lang)
+        wiki_wiki = wikipediaapi.Wikipedia('en') # just to run the multi
         information = []
         try: 
             for link in wiki_links:
