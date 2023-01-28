@@ -15,7 +15,7 @@ from torch.optim import AdamW
 from sklearn.model_selection import train_test_split
 import random
 import evaluate
-from util.utils import get_tag_mappings, get_data, compute_metrics, compute_metrics_crf
+from util.utils import get_tag_mappings, get_data, compute_metrics
 from util.args import create_arg_parser
 from util.dataloader import PreDataCollator
 
@@ -84,7 +84,8 @@ def main():
         dev_df = dev_df[dev_df['lang']==LANG]
     
     
-    
+    train_df['length'] = train_df.sent.apply(lambda x:len(x.split()))
+    dev_df['length'] = dev_df.sent.apply(lambda x:len(x.split()))
     train_data = Dataset.from_pandas(train_df)
     dev_data = Dataset.from_pandas(dev_df)
     

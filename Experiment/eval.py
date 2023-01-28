@@ -98,7 +98,7 @@ def main():
     
     
     ## Transform into hugginface dataset
-    
+    test_df['length'] = test_df.sent.apply(lambda x:len(x.split()))
     test_data = Dataset.from_pandas(test_df)
     
     
@@ -160,7 +160,7 @@ def main():
     # In[ ]:
     
     
-    outputs, vis = feval(test_data,test_tokenized, model, device, IS_CRF=IS_CRF)
+    outputs, vis = feval(test_data,test_tokenized, model, device)
     
     
     # In[ ]:
@@ -169,10 +169,10 @@ def main():
     print(vis[10])
     
     
-    df = pd.DataFrame(outputs, columns=['sent','predictions','true'])
+    # df = pd.DataFrame(outputs, columns=['sent','predictions','true'])
     
     
-    df.to_csv(f'{output_dir}/outputs.csv',index=False)
+    # df.to_csv(f'{output_dir}/outputs.csv',index=False)
 
 
 if __name__ == '__main__':
