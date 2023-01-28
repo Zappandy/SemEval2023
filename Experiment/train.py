@@ -131,9 +131,9 @@ def main():
     model = model.to(device)
     
     EPOCHS = 7
-    LEARNING_RATE = 1e-04
-    TRAIN_BATCH_SIZE = 8
-    VALID_BATCH_SIZE = 8
+    LEARNING_RATE = args.learning_rate
+    TRAIN_BATCH_SIZE = args.batch_size
+    VALID_BATCH_SIZE = args.batch_size
     SAVE_STEPS = args.save_steps
     EVAL_STEPS = 500
     SAVE_LIMIT = 2
